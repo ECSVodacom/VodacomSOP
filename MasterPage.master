@@ -51,7 +51,7 @@
                 <img src="Images/vodacom.png" width="129" height="28" alt="" />
             </a>
             <ul id="primary_nav">
-                <% if (Session["Users"] != null && ((User)Session["Users"]).Id != 0)
+                <% if (Session["Users"] != null && ((User)Session["Users"]).Id != 0 && ((User)Session["Users"]).Id != 46)
                    {
                        Response.Write("<li><a href=\"Store.aspx\"><span><b>Stores</b></span></a></li>");
                        Response.Write("<li><a href=\"Product.aspx\"><span><b>Products</b></span></a></li>");
@@ -59,6 +59,17 @@
                        Response.Write("<li><a href=\"AccessoryPage.aspx\"><span><b>Accessories</b></span></a></li>");
                        Response.Write("<li><a href=\"Order.aspx\"><span><b>Orders</b></span></a></li>");
                        Response.Write("<li><a href=\"Audit.aspx\"><span><b>Audit Log</b></span></a></li>");
+                   } %>
+
+                <% if (Session["Users"] != null && ((User)Session["Users"]).Id == 46)
+                   {
+                       Response.Write("<li><a href=\"Store.aspx\"><span><b>Stores</b></span></a></li>");
+                       Response.Write("<li><a href=\"Product.aspx\"><span><b>Products</b></span></a></li>");
+                       Response.Write("<li><a href=\"RetailerPage.aspx\"><span><b>Retailers</b></span></a></li>");
+                       Response.Write("<li><a href=\"AccessoryPage.aspx\"><span><b>Accessories</b></span></a></li>");
+                       Response.Write("<li><a href=\"Order.aspx\"><span><b>Orders</b></span></a></li>");
+                       Response.Write("<li><a href=\"Audit.aspx\"><span><b>Audit Log</b></span></a></li>");
+                        Response.Write("<li><a href=\"UserLogin.aspx\"><span><b>User Maintenance</b></span></a></li>");
                    } %>
             </ul>
         </div>
