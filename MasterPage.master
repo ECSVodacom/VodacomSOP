@@ -1,0 +1,75 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>
+        <asp:ContentPlaceHolder ID="TitleContent" runat="server">
+        </asp:ContentPlaceHolder>
+    </title>
+    <script type="text/javascript" src="Content/jquery.min.js"> </script>
+    <script type="text/javascript" src="Content/prettify.min.js"> </script>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css" />
+    <link href="Content/Site.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"> </script>
+    <script type="text/javascript">
+        $("[src*=plus]").live("click", function () {
+            $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            $(this).attr("src", "images/minus.png");
+        });
+
+        $("[src*=minus]").live("click", function () {
+            $(this).attr("src", "images/plus.png");
+            $(this).closest("tr").next().remove();
+        });
+    </script>
+    <asp:ContentPlaceHolder ID="ScriptContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div id="masthead">
+        <div id="masthead_wrapper">
+            <ul id="login_widget">
+                <% if (Session["Users"] == null)
+                   {
+                %>
+                <li id="show_login"><a id="A1" href="Login.aspx" runat="server">Sign in to my account</a></li>
+                <%
+                   }
+                   else
+                   {
+                %>
+                <li id="show_login"><a id="A2" href="#" runat="server" onserverclick='LogOff'><% Response.Write(((User)Session["Users"]).Name); %>&nbsp;-&nbsp;Log Off</a></li>
+                <% }
+                %>
+            </ul>
+        </div>
+    </div>
+    <div id="wrapper">
+        <div id="nav">
+            <a href="#" id="logo">
+                <img src="Images/vodacom.png" width="129" height="28" alt="" />
+            </a>
+            <ul id="primary_nav">
+                <% if (Session["Users"] != null && ((User)Session["Users"]).Id != 0)
+                   {
+                       Response.Write("<li><a href=\"Store.aspx\"><span><b>Stores</b></span></a></li>");
+                       Response.Write("<li><a href=\"Product.aspx\"><span><b>Products</b></span></a></li>");
+                       Response.Write("<li><a href=\"RetailerPage.aspx\"><span><b>Retailers</b></span></a></li>");
+                       Response.Write("<li><a href=\"AccessoryPage.aspx\"><span><b>Accessories</b></span></a></li>");
+                       Response.Write("<li><a href=\"Order.aspx\"><span><b>Orders</b></span></a></li>");
+                       Response.Write("<li><a href=\"Audit.aspx\"><span><b>Audit Log</b></span></a></li>");
+                   } %>
+            </ul>
+        </div>
+        <div id="login_form_container" class="shadow">
+            <asp:ContentPlaceHolder runat="server" ID="MainContent">
+            </asp:ContentPlaceHolder>
+        </div>
+        <ul id="footer">
+            <li><a href="http://www.vodacombusiness.co.za/web/vodacombusiness/vb_sme_products_services?URLId=100501&URLId=100344#footerlink">Home</a></li>
+            <li>| <a href="http://www.vodacombusiness.co.za/web/vodacombusiness/vb_sme_products_services?URLId=100501&URLId=100344#footerlink">Contact Us</a></li>
+        </ul>
+    </div>
+</body>
+</html>
