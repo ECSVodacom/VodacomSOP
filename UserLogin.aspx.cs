@@ -1,5 +1,8 @@
 using System;
+using System.Data.Linq;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.ServiceModel.Activities;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -53,7 +56,7 @@ public partial class UserLogin : Page
 
             if (userName.Count() > occurance)
             {
-                errorMessage = String.Format("<b>{3}</b> - UserName already exist");
+                errorMessage = String.Format("UserName already exist");
             }
 
             if (!String.IsNullOrEmpty(errorMessage))
@@ -84,9 +87,11 @@ public partial class UserLogin : Page
             db.Users.DeleteOnSubmit(user);
             db.SubmitChanges();
 
-            lblError.Text = String.Format("<b>{3}</b> - User has been deleted");
+            lblError.Text = String.Format("User has been deleted");
             lblError.Visible = true;
             validation_results.Visible = true;
+
+            ClearErrorMessage();
         }
 
         gvUser.EditIndex = -1;
@@ -126,8 +131,14 @@ public partial class UserLogin : Page
             {
                 existingRecord.Name = e.NewValues["Name"].ToString().Trim();
                 existingRecord.Email = e.NewValues["Email"].ToString().Trim();
-
+                existingRecord.Password = e.NewValues["Password"].ToString().Trim();
                 db.SubmitChanges();
+
+                ClearErrorMessage();
+
+                lblError.Text = String.Format("User has been updated");
+                lblError.Visible = true;
+                validation_results.Visible = true;
             }
         }
     }
@@ -137,21 +148,38 @@ public partial class UserLogin : Page
     {
         using (var db = new VodacDataContext())
         {
-            var user = new User
+                var user = new User
                 {
                     Name = txtUserName.Text.Trim().ToUpper(),
                     Email = txtEmailAddress.Text.Trim(),
                     Password = txtPassword.Text.Trim()
                 };
 
+            var duplicates = db.Users.GroupBy(a => a.Name).Where(b => b.Count() > 1).SelectMany(c => c);
+
+            if (duplicates.Any())
+            {
+                lblError.Text = String.Format("User already exists.");
+                lblError.Visible = true;
+                validation_results.Visible = true;
+            }
+            else
+            {
                 db.Users.InsertOnSubmit(user);
+
                 db.SubmitChanges();
 
                 gvUser.DataBind();
 
-                lblError.Text = String.Format("<b>{3}</b> - New User has been created");
+                lblError.Text = String.Format("New User has been created");
                 lblError.Visible = true;
                 validation_results.Visible = true;
+
+                ClearErrorMessage();
+            }
+
+
+
         }
     }
 

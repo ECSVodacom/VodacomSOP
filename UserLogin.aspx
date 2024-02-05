@@ -110,7 +110,7 @@
                                     <asp:TemplateField HeaderText="Name">
                                         <HeaderStyle BackColor="LightGreen" />
                                         <EditItemTemplate>
-                                            <asp:TextBox ID="txtUsername" runat="server" Text='<%# Bind("Name") %>'></asp:TextBox>
+                                            <asp:Label ID="txtUsername" runat="server" Text='<%# Bind("Name") %>'></asp:Label>
                                         </EditItemTemplate>
                                         <ItemTemplate>
                                             <asp:Label ID="lblUserName" runat="server" Text='<%# Bind("Name") %>'></asp:Label>
@@ -125,6 +125,15 @@
                                             <asp:Label ID="lblEmail" runat="server" Text='<%# Bind("Email") %>'></asp:Label>
                                         </ItemTemplate>
                                     </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Password">
+                                        <HeaderStyle BackColor="LightGreen" />
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtPassword" runat="server" Text='<%# Bind("Password") %>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblPassword" runat="server" Text='<%# Bind("Password") %>'></asp:Label>
+                                        </ItemTemplate>
+                                        </asp:TemplateField>
                                     <asp:CommandField ShowEditButton="True" />
                                     <asp:TemplateField>
                                         <ItemTemplate>

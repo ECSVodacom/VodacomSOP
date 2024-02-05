@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Vodac" Class="VodacDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=192.168.101.36;Initial Catalog=Vodac;Persist Security Info=True;User ID=sparuser" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="VodacConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Branch" Member="Branches">
+    <Type Name="Branch">
+      <Column Name="BranchID" Member="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RetailerID" Member="RetailerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StoreCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="LAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StoreType" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Retailer_Branch" Member="Retailer" ThisKey="RetailerId" OtherKey="Id" Type="Retailer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Retailer" Member="Retailers">
+    <Type Name="Retailer">
+      <Column Name="RetailerID" Member="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RetailerEAN" Member="Ean" Type="System.String" DbType="VarChar(14) NOT NULL" CanBeNull="false" />
+      <Column Name="RetailerName" Member="Name" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ReceiveMail" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="EmailAddress" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="DAccount" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RetVatNr" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SendsBundles" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Retailer_Branch" Member="Branches" ThisKey="Id" OtherKey="RetailerId" Type="Branch" />
+      <Association Name="Retailer_OrderHistory" Member="OrderHistories" ThisKey="Ean" OtherKey="RetailerEan" Type="OrderHistory" />
+      <Association Name="Retailer_Link_Product_Accessory" Member="Link_Product_Accessories" ThisKey="Id" OtherKey="RetailerId" Type="Link_Product_Accessory" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Action" Member="Actions">
+    <Type Name="Action">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Association Name="Action_AuditLog" Member="AuditLogs" ThisKey="Id" OtherKey="ActionId" Type="AuditLog" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AuditLog" Member="AuditLogs">
+    <Type Name="AuditLog">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LAccount" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="StoreCode" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedAt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RetailerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ActionId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PreviousStoreCode" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="PreviousLAccount" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="BranchId" Type="System.Int32" CanBeNull="false" />
+      <Association Name="User_AuditLog" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="Action_AuditLog" Member="Action" ThisKey="ActionId" OtherKey="Id" Type="Action" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserLogin" Member="Users">
+    <Type Name="User">
+      <Column Name="UserID" Member="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserName" Member="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UserPassword" Member="Password" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UserEmail" Member="Email" Type="System.String" CanBeNull="false" />
+      <Association Name="User_AuditLog" Member="AuditLogs" ThisKey="Id" OtherKey="UserId" Type="AuditLog" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Product" Member="Products">
+    <Type Name="Product">
+      <Column Name="ProductID" Member="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Warehouse" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Barcode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+      <Column Name="LastUpdate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Product_Link_Product_Accessory" Member="Link_Product_Accessories" ThisKey="Id" OtherKey="ProductId" Type="Link_Product_Accessory" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Accessory" Member="Accessories">
+    <Type Name="Accessory">
+      <Column Name="AccessoryID" Member="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="LastUpdate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Accessory_Link_Product_Accessory" Member="Link_Product_Accessories" ThisKey="Id" OtherKey="AccessoryId" Type="Link_Product_Accessory" />
+    </Type>
+  </Table>
+  <Table Name="dbo.audit_log" Member="OrderHistories">
+    <Type Name="OrderHistory">
+      <Column Name="AUID" Member="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AUcRetailer" Member="RetailerEan" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AUcStoreCode" Member="StoreCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AUcLAccount" Member="LAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AUcOrderNumber" Member="OrderNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AUdOrderDate" Member="OrderDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AUcInvoiceNumber" Member="InvoiceNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AUdInvoiceDate" Member="InvoiceDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AUcInvoiceAmt" Member="InvoiceAmount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Retailer_OrderHistory" Member="Retailer" ThisKey="RetailerEan" OtherKey="Ean" Type="Retailer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Link_Product_Accessory" Member="Link_Product_Accessories">
+    <Type Name="Link_Product_Accessory">
+      <Column Name="LinkID" Member="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RetailerID" Member="RetailerId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Member="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AccessoryID" Member="AccessoryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Accessory_Link_Product_Accessory" Member="Accessory" ThisKey="AccessoryId" OtherKey="Id" Type="Accessory" IsForeignKey="true" />
+      <Association Name="Product_Link_Product_Accessory" Member="Product" ThisKey="ProductId" OtherKey="Id" Type="Product" IsForeignKey="true" />
+      <Association Name="Retailer_Link_Product_Accessory" Member="Retailer" ThisKey="RetailerId" OtherKey="Id" Type="Retailer" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
